@@ -368,7 +368,7 @@ export default class Level01 extends Phaser.Scene {
         else {
             if (!this.replayText) {
             const style = { color: '#6b4401', fontSize: 40, fontFamily: 'monospace' }
-            this.replayText = this.add.text(600, 140, 'Tap or press space to jump', style)
+            this.replayText = this.add.text(600, 140, 'Tap or press space to play again', style)
                                         .setOrigin(0.5).setScrollFactor(0);
             }
             // Transparency effect
