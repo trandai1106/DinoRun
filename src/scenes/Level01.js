@@ -22,7 +22,6 @@ export default class Level01 extends Phaser.Scene {
     speed
     playerState // 0: idle, 1: run infinitely, 2: jump, 3: dead, 4: dead and slide on platform,
                 // -1: game over and stop
-    cursors
     music
 
     constructor() {
@@ -92,6 +91,10 @@ export default class Level01 extends Phaser.Scene {
         this.load.image('dino-dead6', 'assets/sprites/dino/Dead(6).png');
         this.load.image('dino-dead7', 'assets/sprites/dino/Dead(7).png');
         this.load.image('dino-dead8', 'assets/sprites/dino/Dead(8).png');
+        
+        // Sound effect
+        this.load.audio('jump', 'assets/sounds/jump.wav');
+        this.load.audio('lose', 'assets/sounds/lose.wav');
     }
 
     create() {
@@ -214,12 +217,57 @@ export default class Level01 extends Phaser.Scene {
         this.cameras.main.followOffset.set(-450, 0);
 
         // Input handle
-        this.cursors = this.input.keyboard.createCursorKeys();
+        // Phone use Tap
+        this.input.addListener('pointerdown', ()=> {
+            // Change Idle to Run
+            if (this.playerState == 0) {
+                // Clear the guide text
+                this.guideText.text = '';
+                // Change state
+                this.playerState = 1;
+            }
+            // Change Run to Jump
+            else if (this.playerState == 1) {
+                this.sound.play('jump');
+                this.playerState = 2;
+                this.player.setVelocityY(- DINO_JUMP_SPEED);
+                this.player.anims.play('dino-jump');
+            }
+            // Replay
+            else if (this.playerState == -1) {
+                this.scene.restart();
+            }
+        });
+        // PC, Laptop use Space bar
+        this.input.keyboard.addListener('keydown-SPACE', ()=> {
+            // Change Idle to Run
+            if (this.playerState == 0) {
+                // Clear the guide text
+                this.guideText.text = '';
+                // Change state
+                this.playerState = 1;
+            }
+            // Change Run to Jump
+            else if (this.playerState == 1) {
+                this.sound.play('jump');
+                this.playerState = 2;
+                this.player.setVelocityY(- DINO_JUMP_SPEED);
+                this.player.anims.play('dino-jump');
+            }
+            // Replay
+            else if (this.playerState == -1) {
+                this.scene.restart();
+            }
+        });
 
         // Collision
         this.physics.add.collider(this.player, this.platformCollider);
         var colliderDinoCactus = this.physics.add.overlap(this.player, this.cactuses, () => {
+            // Sound effect
+            this.sound.play('lose');
+            // Change state
             if (this.playerState != 3) this.playerState = 3;
+            // Clear collision detection
             this.physics.world.removeCollider(colliderDinoCactus);
         });
     }
@@ -265,7 +313,7 @@ export default class Level01 extends Phaser.Scene {
         else if (this.playerState == 0) {
             if (!this.guideText) {
             const style = { color: '#6b4401', fontSize: 40, fontFamily: 'monospace' }
-            this.guideText = this.add.text(600, 140, 'Press SPACE to jump', style)
+            this.guideText = this.add.text(600, 140, 'Tap or press space to jump', style)
                                         .setOrigin(0.5).setScrollFactor(0);
             }
             // Transparency effect
@@ -286,12 +334,6 @@ export default class Level01 extends Phaser.Scene {
             }
 
             this.player.anims.play('dino-idle', true);
-            if (this.cursors.space.isDown) {
-                // Clear the guide text
-                this.guideText.text = '';
-                // Change state
-                this.playerState = 1;
-            }
         }
         // If the dino is running
         else if (this.playerState == 1) {
@@ -303,15 +345,7 @@ export default class Level01 extends Phaser.Scene {
             this.platformCollider.setVelocityX(this.speed);
             if (this.speed < DINO_RUN_SPEED_MAX) this.speed += DINO_RUN_SPEED_GAIN;
             // Animation
-            this.player.anims.play('dino-run', true);
-            
-            // If press space, the dino will jump
-            if (this.cursors.space.isDown) {
-                this.playerState = 2;
-                this.player.setVelocityY(- DINO_JUMP_SPEED);
-                this.player.anims.play('dino-jump');
-                return;
-            }
+            this.player.anims.play('dino-run', true);            
         }
         // If the dino is jumping
         else if (this.playerState == 2) {
@@ -329,16 +363,12 @@ export default class Level01 extends Phaser.Scene {
                 this.playerState = 1;
                 return;
             }
-            if (this.cursors.left.isDown) {
-               this.playerState = 3;
-               return;
-            }
         }
-        // If game over, press space to replay
+        // If game over, this.playerState == -1, tap or press space to replay
         else {
             if (!this.replayText) {
             const style = { color: '#6b4401', fontSize: 40, fontFamily: 'monospace' }
-            this.replayText = this.add.text(600, 140, 'Press SPACE to play again', style)
+            this.replayText = this.add.text(600, 140, 'Tap or press space to jump', style)
                                         .setOrigin(0.5).setScrollFactor(0);
             }
             // Transparency effect
@@ -355,10 +385,6 @@ export default class Level01 extends Phaser.Scene {
             }
             else if (this.replayText.alpha >= 1 && !this.isTransparencyText) {
                 this.isTransparencyText = true
-            }
-            // If press Space then replay
-            if (this.cursors.space.isDown) {
-                this.scene.restart();
             }
         }
 
