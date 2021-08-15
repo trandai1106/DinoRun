@@ -1,13 +1,16 @@
-import Phaser from './lib/phaser.js'
+import Phaser from './lib/phaser.js';
 
-import Level01 from './scenes/Level01.js'
+import Preload from './scenes/Preload.js';
+import Play from './scenes/Play.js';
 
 export default new Phaser.Game({
     type: Phaser.AUTO,
     width: 1200,
     height: 580,
+    backgroundColor: '#f4cca1',
     scene: [
-        Level01
+        Preload,
+        Play
     ],
     physics: {
         default: 'arcade',

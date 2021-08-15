@@ -1,5 +1,5 @@
 import Phaser from '../lib/phaser.js';
-import Cactus from '../game/Cactus.js'
+import Cactus from '../game/Cactus.js';
 
 const DINO_SCALE = 0.32;
 const DINO_RUN_SPEED_MIN = 260;
@@ -8,7 +8,7 @@ const DINO_RUN_SPEED_GAIN = 0.04;
 const DINO_JUMP_SPEED = 450;
 const DINO_GRAVITY = 500;
 
-export default class Level01 extends Phaser.Scene {
+export default class Play extends Phaser.Scene {
     bg
     platform
     platformCollider
@@ -25,76 +25,14 @@ export default class Level01 extends Phaser.Scene {
     music
 
     constructor() {
-        super("level01");
+        super("play");
     }
     
     init() {
         this.score = 0;
         this.playerState = 0;
         this.speed = DINO_RUN_SPEED_MIN;
-        this.replayText = null;
-        this.guideText = null;
         this.isTransparencyText = true;
-    }
-
-    preload() {
-        // Load the background image
-        this.load.image('bg', 'assets/sprites/environment/background/bg.png');
-
-        // Load the platform
-        this.load.image('platform', 'assets/sprites/environment/tiles/2.png');
-
-        // Load objects
-        this.load.image('cactus1', 'assets/sprites/environment/objects/Cactus(1).png')
-        this.load.image('cactus2', 'assets/sprites/environment/objects/Cactus(2).png')
-        this.load.image('cactus3', 'assets/sprites/environment/objects/Cactus(3).png')
-        this.load.image('signpost', 'assets/sprites/environment/objects/SignArrow.png')
-        this.load.image('grass1', 'assets/sprites/environment/objects/Grass(1).png')
-        this.load.image('grass2', 'assets/sprites/environment/objects/Grass(2).png')
-
-        // Load the dino sprite
-        this.load.image('dino-idle1', 'assets/sprites/dino/Idle(1).png');
-        this.load.image('dino-idle2', 'assets/sprites/dino/Idle(2).png');
-        this.load.image('dino-idle3', 'assets/sprites/dino/Idle(3).png');
-        this.load.image('dino-idle4', 'assets/sprites/dino/Idle(4).png');
-        this.load.image('dino-idle5', 'assets/sprites/dino/Idle(5).png');
-        this.load.image('dino-idle6', 'assets/sprites/dino/Idle(6).png');
-        this.load.image('dino-idle7', 'assets/sprites/dino/Idle(7).png');
-        this.load.image('dino-idle8', 'assets/sprites/dino/Idle(8).png');
-        this.load.image('dino-idle9', 'assets/sprites/dino/Idle(9).png');
-        this.load.image('dino-idle10', 'assets/sprites/dino/Idle(10).png');        
-        this.load.image('dino-run1', 'assets/sprites/dino/Run(1).png'); 
-        this.load.image('dino-run2', 'assets/sprites/dino/Run(2).png'); 
-        this.load.image('dino-run3', 'assets/sprites/dino/Run(3).png'); 
-        this.load.image('dino-run4', 'assets/sprites/dino/Run(4).png'); 
-        this.load.image('dino-run5', 'assets/sprites/dino/Run(5).png'); 
-        this.load.image('dino-run6', 'assets/sprites/dino/Run(6).png'); 
-        this.load.image('dino-run7', 'assets/sprites/dino/Run(7).png'); 
-        this.load.image('dino-run8', 'assets/sprites/dino/Run(8).png');
-        this.load.image('dino-jump1', 'assets/sprites/dino/Jump(1).png');
-        this.load.image('dino-jump2', 'assets/sprites/dino/Jump(2).png');
-        this.load.image('dino-jump3', 'assets/sprites/dino/Jump(3).png');
-        this.load.image('dino-jump4', 'assets/sprites/dino/Jump(4).png');
-        this.load.image('dino-jump5', 'assets/sprites/dino/Jump(5).png');
-        this.load.image('dino-jump6', 'assets/sprites/dino/Jump(6).png');
-        this.load.image('dino-jump7', 'assets/sprites/dino/Jump(7).png');
-        this.load.image('dino-jump8', 'assets/sprites/dino/Jump(8).png');
-        this.load.image('dino-jump9', 'assets/sprites/dino/Jump(9).png');
-        this.load.image('dino-jump10', 'assets/sprites/dino/Jump(10).png');
-        this.load.image('dino-jump11', 'assets/sprites/dino/Jump(11).png');
-        this.load.image('dino-jump12', 'assets/sprites/dino/Jump(12).png');
-        this.load.image('dino-dead1', 'assets/sprites/dino/Dead(1).png');
-        this.load.image('dino-dead2', 'assets/sprites/dino/Dead(2).png');
-        this.load.image('dino-dead3', 'assets/sprites/dino/Dead(3).png');
-        this.load.image('dino-dead4', 'assets/sprites/dino/Dead(4).png');
-        this.load.image('dino-dead5', 'assets/sprites/dino/Dead(5).png');
-        this.load.image('dino-dead6', 'assets/sprites/dino/Dead(6).png');
-        this.load.image('dino-dead7', 'assets/sprites/dino/Dead(7).png');
-        this.load.image('dino-dead8', 'assets/sprites/dino/Dead(8).png');
-        
-        // Sound effect
-        this.load.audio('jump', 'assets/sounds/jump.wav');
-        this.load.audio('lose', 'assets/sounds/lose.wav');
     }
 
     create() {
@@ -204,11 +142,13 @@ export default class Level01 extends Phaser.Scene {
             frameRate: 12,
         });
 
-        // Render the score
-        const style = { color: '#6b4401', fontSize: 40, fontFamily: 'monospace' }
+        // Render the score and notification
+        const style = { color: '#6b4401', fontSize: 40, fontFamily: 'monospace' };
         this.scoreText = this.add.text(600, 60, this.score, style)
-                                            .setScrollFactor(0)
-                                            .setOrigin(0.5, 0.5);
+            .setScrollFactor(0)
+            .setOrigin(0.5, 0.5);
+        this.guideText = this.add.text(600, 140, 'Tap or press space to jump', style)
+            .setOrigin(0.5).setScrollFactor(0);
 
         // Bound the camera
         this.cameras.main.setBounds(0, 0, 500000, 580);
@@ -302,6 +242,10 @@ export default class Level01 extends Phaser.Scene {
             if (this.speed > DINO_RUN_SPEED_MIN * 0.15) this.speed *= 0.98;
              // Game over
             else {
+                // Guide
+                const style = { color: '#6b4401', fontSize: 40, fontFamily: 'monospace' }
+                this.replayText = this.add.text(600, 140, 'Tap or press space to play again', style)
+                    .setOrigin(0.5).setScrollFactor(0);
                 this.playerState = -1;
                 this.speed = 0;
                 this.player.setVelocityX(0);
@@ -311,12 +255,7 @@ export default class Level01 extends Phaser.Scene {
         }
         // If the dino is idle
         else if (this.playerState == 0) {
-            if (!this.guideText) {
-            const style = { color: '#6b4401', fontSize: 40, fontFamily: 'monospace' }
-            this.guideText = this.add.text(600, 140, 'Tap or press space to jump', style)
-                                        .setOrigin(0.5).setScrollFactor(0);
-            }
-            // Transparency effect
+            // Transparency effect text
             if (this.isTransparencyText)
             {
                 this.guideText.alpha -= 0.01
@@ -366,12 +305,7 @@ export default class Level01 extends Phaser.Scene {
         }
         // If game over, this.playerState == -1, tap or press space to replay
         else {
-            if (!this.replayText) {
-            const style = { color: '#6b4401', fontSize: 40, fontFamily: 'monospace' }
-            this.replayText = this.add.text(600, 140, 'Tap or press space to play again', style)
-                                        .setOrigin(0.5).setScrollFactor(0);
-            }
-            // Transparency effect
+            // Transparency effect text
             if (this.isTransparencyText)
             {
                 this.replayText.alpha -= 0.01
