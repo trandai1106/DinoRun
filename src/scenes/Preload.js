@@ -1,5 +1,4 @@
 import Phaser from '../lib/phaser.js';
-import Cactus from '../game/Cactus.js';
 
 export default class Preload extends Phaser.Scene {
     title
@@ -32,12 +31,20 @@ export default class Preload extends Phaser.Scene {
         this.load.image('platform', 'assets/sprites/environment/tiles/2.png');
 
         // Load objects
-        this.load.image('cactus1', 'assets/sprites/environment/objects/Cactus(1).png')
-        this.load.image('cactus2', 'assets/sprites/environment/objects/Cactus(2).png')
-        this.load.image('cactus3', 'assets/sprites/environment/objects/Cactus(3).png')
-        this.load.image('signpost', 'assets/sprites/environment/objects/SignArrow.png')
-        this.load.image('grass1', 'assets/sprites/environment/objects/Grass(1).png')
-        this.load.image('grass2', 'assets/sprites/environment/objects/Grass(2).png')
+        this.load.image('cactus1', 'assets/sprites/environment/objects/Cactus(1).png');
+        this.load.image('cactus2', 'assets/sprites/environment/objects/Cactus(2).png');
+        this.load.image('cactus3', 'assets/sprites/environment/objects/Cactus(3).png');
+        this.load.image('signpost', 'assets/sprites/environment/objects/SignArrow.png');
+        this.load.image('grass1', 'assets/sprites/environment/objects/Grass(1).png');
+        this.load.image('grass2', 'assets/sprites/environment/objects/Grass(2).png');
+
+        // Load button images
+        this.load.image('pause-button', 'assets/sprites/gui/Pause.png');
+        this.load.image('pause-button-hover', 'assets/sprites/gui/Pause_hover.png');
+        this.load.image('pause-button-click', 'assets/sprites/gui/Pause_click.png');
+        this.load.image('resume-button', 'assets/sprites/gui/Resume.png');
+        this.load.image('resume-button-hover', 'assets/sprites/gui/Resume_hover.png');
+        this.load.image('resume-button-click', 'assets/sprites/gui/Resume_click.png');
 
         // Load the dino sprite
         this.load.image('dino-idle1', 'assets/sprites/dino/Idle(1).png');

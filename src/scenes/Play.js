@@ -23,6 +23,7 @@ export default class Play extends Phaser.Scene {
     playerState // 0: idle, 1: run infinitely, 2: jump, 3: dead, 4: dead and slide on platform,
                 // -1: game over and stop
     music
+    pauseButton
 
     constructor() {
         super("play");
@@ -156,9 +157,29 @@ export default class Play extends Phaser.Scene {
         this.cameras.main.startFollow(this.player);
         this.cameras.main.followOffset.set(-450, 0);
 
+        // Add button 
+        this.pauseButton = this.add.image(1150, 50, 'pause-button').setScrollFactor(0).setOrigin(0.5);
+        this.pauseButton.setInteractive();
+        this.pauseButton.on('pointerover', ()=>{
+            this.pauseButton.setTexture('pause-button-hover');
+        });
+        this.pauseButton.on('pointerdown', ()=>{
+            this.pauseButton.setTexture('pause-button-click');
+        });
+        this.pauseButton.on('pointerup', ()=>{
+            this.scene.pause();
+            // setInterval(()=>{this.scene.resume();}, 3000);
+            this.scene.bringToTop('pause');
+            this.scene.launch('pause');
+        });
+        this.pauseButton.on('pointerout', ()=>{
+            this.pauseButton.setTexture('pause-button');
+        });
+
         // Input handle
         // Phone use Tap
-        this.input.addListener('pointerdown', ()=> {
+        this.bg.setInteractive();
+        this.bg.on('pointerdown', ()=> {
             // Change Idle to Run
             if (this.playerState == 0) {
                 // Clear the guide text
@@ -199,7 +220,7 @@ export default class Play extends Phaser.Scene {
                 this.scene.restart();
             }
         });
-
+        
         // Collision
         this.physics.add.collider(this.player, this.platformCollider);
         var colliderDinoCactus = this.physics.add.overlap(this.player, this.cactuses, () => {
@@ -335,7 +356,7 @@ export default class Play extends Phaser.Scene {
             _cactuses.shift();
             // Spawn a new one at the right side
             const lastCactusPositionX = _cactuses[_cactuses.length - 1].x;
-            this.cactuses.create(lastCactusPositionX + Math.floor(Math.random() * (501)) + 500, 
+            this.cactuses.create(lastCactusPositionX + Math.floor(Math.random() * (701)) + 500, 
                                 452, 'cactus' + (Math.floor(Math.random() * 3) + 1), true, true).setOrigin(0.5, 1);
         }
         // Spawn and destroy other objects

@@ -2,6 +2,7 @@ import Phaser from './lib/phaser.js';
 
 import Preload from './scenes/Preload.js';
 import Play from './scenes/Play.js';
+import Pause from './scenes/Pause.js';
 
 export default new Phaser.Game({
     type: Phaser.AUTO,
@@ -10,7 +11,8 @@ export default new Phaser.Game({
     backgroundColor: '#f4cca1',
     scene: [
         Preload,
-        Play
+        Play,
+        Pause
     ],
     physics: {
         default: 'arcade',
